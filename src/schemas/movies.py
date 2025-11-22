@@ -3,7 +3,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
+
 class MovieDetailResponseSchema(BaseModel):
+    id: int
     name: str
     date: datetime.date
     score: float
@@ -19,6 +21,7 @@ class MovieDetailResponseSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class MovieListResponseSchema(BaseModel):
     movies: List[MovieDetailResponseSchema]

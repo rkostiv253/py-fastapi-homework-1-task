@@ -8,6 +8,7 @@ from src.config.settings import get_settings
 from src.database.session import get_db_contextmanager, init_db
 from src.database.models import MovieModel
 
+
 class CSVDatabaseSeeder:
     """
     Class responsible for seeding the database with movie data from a CSV file.

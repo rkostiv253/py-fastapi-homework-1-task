@@ -10,9 +10,10 @@ from src.schemas.movies import MovieDetailResponseSchema, MovieListResponseSchem
 
 router = APIRouter()
 
+
 @router.get("/movies/")
-async def read_movies(page: int=Query(1, ge=1),
-                      per_page: int=Query(10, ge=1, le=20),
+async def read_movies(page: int = Query(1, ge=1),
+                      per_page: int = Query(10, ge=1, le=20),
                       db: AsyncSession = Depends(get_db)):
 
     offset = (page - 1) * per_page
@@ -32,8 +33,8 @@ async def read_movies(page: int=Query(1, ge=1),
     if page > total_pages > 0:
         raise HTTPException(status_code=404, detail="No movies found.")
 
-    prev_page = f"/movies/?page={page-1}&per_page={per_page}" if page > 1 else None
-    next_page = f"/movies/?page={page+1}&per_page={per_page}" if page < total_pages else None
+    prev_page = f"/theater/movies/?page={page - 1}&per_page={per_page}" if page > 1 else None
+    next_page = f"/theater/movies/?page={page + 1}&per_page={per_page}" if page < total_pages else None
 
     return MovieListResponseSchema(
         movies=movies,
@@ -43,7 +44,8 @@ async def read_movies(page: int=Query(1, ge=1),
         next_page=next_page,
     )
 
-@router.get("/movies/{movie_id}", response_model=MovieDetailResponseSchema)
+
+@router.get("/movies/{movie_id}/", response_model=MovieDetailResponseSchema)
 async def get_movie(movie_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(MovieModel).where(MovieModel.id == movie_id))
     movie = result.scalar_one_or_none()
